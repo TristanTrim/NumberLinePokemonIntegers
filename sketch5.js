@@ -33,8 +33,11 @@ const RENDER_SCALE = 0.5;
 
 
 // Visible number line and walking boundaries (from version 2).
-const minP = 0;
-const maxP = 20;
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const minP = parseInt(urlParams.get('min'));
+const maxP = parseInt(urlParams.get('max'));
+
 
 // Integer n maps to the same horizontal location as Ash at position n.
 // count = 20 + 2*n, so Ash is drawn at ash.width/4 * count.
