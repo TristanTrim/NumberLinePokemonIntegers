@@ -33,10 +33,18 @@ const RENDER_SCALE = 0.5;
 
 
 // Visible number line and walking boundaries (from version 2).
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const minP = parseInt(urlParams.get('min'));
 const maxP = parseInt(urlParams.get('max'));
+
+// choose if negative numbers will be used or not
+const canUseNegatives = Boolean(parseInt(urlParams.get("neg")));
+
+// set the largest number that can be added / subtracted
+const countLim = parseInt(urlParams.get("countLim"));
+
 
 
 // Integer n maps to the same horizontal location as Ash at position n.
@@ -324,16 +332,16 @@ function draw() {
   // Version 2's bounded line, centered using the same coordinates as Ash.
   push()
     const lineY = 400;
-    const tickTop = lineY - 25;
-    const tickBottom = lineY + 25;
-    const labelY = lineY + 75;
+    const tickTop = lineY - 20;
+    const tickBottom = lineY + 32;
+    const labelY = lineY + 100;
 
     stroke(0);
     strokeWeight(3);
     line(xFromNumber(minP) - 40, lineY, xFromNumber(maxP) + 40, lineY);
 
     for(let i = minP; i <= maxP; i++){
-      strokeWeight(i === 0 ? 6 : 3);
+      strokeWeight(i === 0 ? 12 : 3);
       line(xFromNumber(i),
            i === 0 ? tickTop - 10 : tickTop,
            xFromNumber(i),
@@ -552,22 +560,23 @@ function keyPressed() {
     // Version 1 question styles (including +(-n) and -(-n)), with
     // a safeguard so the answer is ALWAYS on the visible -9..9 line.
     // There is no valid +/-10 move from zero on this finite line.
-    const maxAvailableStep = Math.max(maxP - p, p - minP);
-    let n = round(random(0, 10));
-    if(n > 6) n = round(random(1, 10));
-    n = Math.min(n, maxAvailableStep);
+    let n = round(random(0, countLim));
+
 
     const canAdd = p + n <= maxP;
     const canSubtract = p - n >= minP;
     // Alternate preferred directions like version 1. If the preferred
     // direction crosses the edge, use the other one instead.
     const subtract = even % 2 ? canSubtract : !canAdd;
-    const useNegativeNotation = Boolean(round(random(0, 1)));
+    const useNegativeNotation = canUseNegatives ? Boolean(round(random(0, 1))) : false;
 
+    
     if(subtract){
+      if (p-n<minP) { n = p-minP }
       pCorrect = p - n;
       question = useNegativeNotation ? p + " + (-" + n + ")" : p + " - " + n;
     } else {
+      if (p+n>maxP) { n = maxP-p }
       pCorrect = p + n;
       question = useNegativeNotation ? p + " - (-" + n + ")" : p + " + " + n;
     }
