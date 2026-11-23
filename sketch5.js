@@ -33,8 +33,8 @@ const RENDER_SCALE = 0.5;
 
 
 // Visible number line and walking boundaries (from version 2).
-const minP = -9;
-const maxP = 9;
+const minP = 0;
+const maxP = 20;
 
 // Integer n maps to the same horizontal location as Ash at position n.
 // count = 20 + 2*n, so Ash is drawn at ash.width/4 * count.
