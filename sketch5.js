@@ -39,7 +39,7 @@ const maxP = 20;
 // Integer n maps to the same horizontal location as Ash at position n.
 // count = 20 + 2*n, so Ash is drawn at ash.width/4 * count.
 function xFromNumber(n) {
-  return ash.width / 2 * (maxP + n);
+  return ash.width / 2 * (10 + n);
 }
 
 function worldScale() {
@@ -254,7 +254,7 @@ function draw() {
   push()
   translate(CANVAS_WIDTH/2, 450)
   scale(worldScale())
-  translate(-xFromNumber(0), -400)
+  translate(-xFromNumber((minP+maxP)/2), -400)
 
   // console.log(right)
   for(let p in prints){
